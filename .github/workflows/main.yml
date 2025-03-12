@@ -16,7 +16,7 @@ jobs:
               core.setFailed("Geen pull request gevonden.");
               return;
             }
-            await github.checks.create({
+            await github.rest.checks.create({
               owner: context.repo.owner,
               repo: context.repo.repo,
               name: "Automatische testen?",
