@@ -6,6 +6,8 @@ on:
 jobs:
   add_message:
     runs-on: ubuntu-latest
+    permissions:
+      checks: write
     steps:
       - name: Voeg interactieve check toe
         uses: actions/github-script@v6
