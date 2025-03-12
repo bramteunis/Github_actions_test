@@ -1,0 +1,43 @@
+name: PR Message met Test Optie
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+
+jobs:
+  add_message:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Voeg interactieve check toe
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            if (!pr) {
+              core.setFailed("Geen pull request gevonden.");
+              return;
+            }
+            await github.checks.create({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              name: "Automatische testen?",
+              head_sha: pr.head.sha,
+              status: "completed",
+              conclusion: "neutral",
+              output: {
+                title: "Wil je automatisch de tests draaien?",
+                summary: "Klik op 'Ja' om de tests te starten, of 'Nee' om niets te doen.",
+                text: "Gebruik de knoppen hieronder:",
+                actions: [
+                  {
+                    label: "Ja",
+                    identifier: "run-tests",
+                    description: "Start de tests"
+                  },
+                  {
+                    label: "Nee",
+                    identifier: "skip-tests",
+                    description: "Doe niets"
+                  }
+                ]
+              }
+            });
